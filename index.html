@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Client Value Assessment Report — Campaign Hub | IFS Copperleaf</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Euclid+Circular+A:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --ifs-midnight:    #170430;
+  --ifs-dark-purple: #360065;
+  --ifs-lilac:  #CD92FF;
+  --ifs-purple: #8427E2;
+  --ifs-blue:   #72C9F8;
+  --ifs-green:   #33FF94;
+  --ifs-fuchsia: #E00072;
+  --ifs-orange: #EF5829;
+  --ifs-yellow: #FFCD5A;
+  --ifs-dark-grey: #232323;
+  --ifs-grey-2:    #919BA5;
+  --ifs-grey-3:    #C8D2D7;
+  --ifs-grey-4:    #E1EBEB;
+  --ifs-white:     #FFFFFF;
+  --ifs-font: 'Euclid Circular A', 'Inter', sans-serif;
+  --card-bg: #2B0A52;
+  --card-bg-2: #23063F;
+  --line: rgba(255,255,255,0.10);
+  --sidebar-w: 272px;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--ifs-midnight);
+  color: #fff;
+  font-family: var(--ifs-font);
+  letter-spacing: -0.01em;
+  scroll-behavior: smooth;
+}
+h1,h2,h3,h4 { font-weight: 500; letter-spacing: -0.025em; margin: 0 0 8px; }
+p { line-height: 1.6; color: var(--ifs-grey-3); margin: 0 0 12px; }
+a { color: var(--ifs-blue); }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--ifs-dark-purple); border-radius: 8px; }
+
+/* ===== LAYOUT ===== */
+.app { display: flex; min-height: 100vh; }
+
+/* ---- Sidebar ---- */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #1D0538 0%, #170430 100%);
+  border-right: 1px solid var(--line);
+  position: fixed; top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  padding: 20px 14px 24px;
+  z-index: 40;
+  transition: transform .25s ease;
+}
+.brand-row { display:flex; align-items:center; gap:10px; padding: 6px 10px 18px; border-bottom: 1px solid var(--line); margin-bottom: 14px;}
+.brand-mark { width:30px;height:30px; border-radius:50%; background: conic-gradient(from 0deg, var(--ifs-purple), var(--ifs-blue), var(--ifs-lilac), var(--ifs-purple)); flex-shrink:0;}
+.brand-text { font-size: 13px; font-weight:600; line-height:1.2; }
+.brand-text span { display:block; font-size:10px; font-weight:400; color: var(--ifs-grey-2); letter-spacing: 0.045em; text-transform:uppercase; }
+
+.nav-group-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ifs-grey-2); padding: 14px 12px 6px; }
+.nav-btn {
+  display:flex; align-items:center; gap:10px;
+  width:100%; text-align:left; background:none; border:none;
+  color: var(--ifs-grey-3); font-family: var(--ifs-font);
+  font-size: 13.5px; padding: 9px 12px; border-radius: 10px; cursor:pointer;
+  margin-bottom: 2px; transition: background .15s, color .15s;
+}
+.nav-btn svg { width:16px; height:16px; flex-shrink:0; stroke: currentColor; }
+.nav-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.nav-btn.active { background: linear-gradient(90deg, rgba(132,39,226,0.35), rgba(114,201,248,0.10)); color: #fff; box-shadow: inset 2px 0 0 var(--ifs-blue); }
+
+.sidebar-foot { margin-top: 18px; padding: 12px; border-top: 1px solid var(--line); font-size: 11px; color: var(--ifs-grey-2); }
+
+.menu-toggle {
+  display:none; position: fixed; top: 14px; left: 14px; z-index: 50;
+  background: var(--ifs-dark-purple); border: 1px solid var(--line); color:#fff;
+  width: 40px; height: 40px; border-radius: 10px; align-items:center; justify-content:center; cursor:pointer;
+}
+
+/* ---- Main ---- */
+.main { margin-left: var(--sidebar-w); flex: 1; min-width: 0; }
+.topbar {
+  position: sticky; top:0; z-index: 30;
+  background: rgba(23,4,48,0.85); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 32px; display:flex; align-items:center; justify-content:space-between; gap: 16px; flex-wrap: wrap;
+}
+.topbar h2 { font-size: 18px; margin:0; }
+.topbar .breadcrumb { font-size: 11px; color: var(--ifs-grey-2); text-transform: uppercase; letter-spacing: 0.06em; }
+.status-pill { display:inline-flex; align-items:center; gap:6px; font-size:11px; padding: 5px 12px; border-radius: 999px; background: rgba(51,255,148,0.12); color: var(--ifs-green); border: 1px solid rgba(51,255,148,0.3); }
+.status-pill .dot { width:6px;height:6px;border-radius:50%; background: var(--ifs-green); }
+
+.section { display:none; padding: 28px 32px 80px; max-width: 1180px; }
+.section.active { display:block; animation: fadeIn .3s ease; }
+@keyframes fadeIn { from {opacity:0; transform: translateY(6px);} to {opacity:1; transform:none;} }
+
+.eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ifs-blue); font-weight:600; margin-bottom:8px;}
+.section h1.page-title { font-size: 30px; margin-bottom: 6px; }
+.section .page-sub { color: var(--ifs-grey-3); max-width: 720px; margin-bottom: 26px;}
+
+/* ===== Cards & Grids ===== */
+.grid { display:grid; gap: 16px; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 900px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px;
+}
+.card-light { background: var(--ifs-grey-4); color: var(--ifs-dark-grey); border-radius: 14px; padding: 20px; }
+.card-light p { color: #4b4b4b; }
+.card h4 { color: #fff; font-size: 14px; margin-bottom: 6px; }
+.card .label { font-size: 11px; text-transform:uppercase; letter-spacing:0.06em; color: var(--ifs-grey-2); }
+
+.kpi-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:20px; text-align:left; }
+.kpi-card .icon { width:34px;height:34px; margin-bottom:10px; stroke: var(--ifs-blue); stroke-width:2; fill:none; }
+.kpi-value { font-size: 30px; font-weight:600; background: linear-gradient(90deg, var(--ifs-purple) 50%, var(--ifs-lilac) 75%, var(--ifs-blue) 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.kpi-label { font-size:12.5px; color: var(--ifs-grey-3); margin-top:4px; }
+
+.callout { border-radius: 14px; padding: 18px 20px; border: 1px solid; margin-bottom: 16px; }
+.callout.info { background: rgba(114,201,248,0.08); border-color: rgba(114,201,248,0.3); }
+.callout.proof { background: rgba(51,255,148,0.07); border-color: rgba(51,255,148,0.25); }
+.callout.warn { background: rgba(239,88,41,0.08); border-color: rgba(239,88,41,0.3); }
+.callout p { color: #fff; margin:0; font-size: 13.5px;}
+.callout .tag { font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600; margin-bottom:6px; display:block; }
+.callout.info .tag { color: var(--ifs-blue); }
+.callout.proof .tag { color: var(--ifs-green); }
+.callout.warn .tag { color: var(--ifs-orange); }
+
+.quote-card { border-left: 3px solid var(--ifs-purple); padding: 14px 18px; background: rgba(132,39,226,0.08); border-radius: 0 12px 12px 0; margin-bottom: 14px; }
+.quote-card p { color: #fff; font-style: italic; margin:0; font-size:14px; }
+
+.pill { display:inline-block; font-size:11px; padding:4px 12px; border-radius:999px; background: rgba(255,255,255,0.08); color: var(--ifs-grey-3); margin: 2px 4px 2px 0; }
+.pill.purple { background: rgba(132,39,226,0.25); color: var(--ifs-lilac); }
+.pill.blue { background: rgba(114,201,248,0.2); color: var(--ifs-blue); }
+
+.btn { display:inline-flex; align-items:center; gap:8px; border-radius:999px; padding: 11px 22px; font-weight:600; font-size:13.5px; text-decoration:none; border:none; cursor:pointer; font-family: var(--ifs-font); }
+.btn-blue { background: var(--ifs-blue); color: var(--ifs-midnight); }
+.btn-purple { background: var(--ifs-purple); color:#fff; }
+.btn-outline { background:transparent; border: 1px solid var(--ifs-grey-2); color:#fff; }
+
+.hr { height:1px; background: var(--line); border:none; margin: 26px 0; }
+
+/* ===== Hero ===== */
+.hero {
+  border-radius: 22px; overflow:hidden; position:relative; margin-bottom: 26px;
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(132,39,226,0.55) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 85%, rgba(54,0,101,0.9) 0%, #170430 65%);
+  padding: 44px 40px;
+  border: 1px solid var(--line);
+}
+.hero .eyebrow { color: var(--ifs-blue); }
+.hero h1 { font-size: 34px; max-width: 640px; margin-bottom: 12px; }
+.hero .gradient-text { background: linear-gradient(90deg, #8427E2 50%, #CD92FF 75%, #72C9F8 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.hero p.desc { max-width: 560px; font-size: 15px; }
+.hero-meta { display:flex; gap: 28px; flex-wrap:wrap; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+.hero-meta .item .label { font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color: var(--ifs-grey-2); display:block; margin-bottom:3px;}
+.hero-meta .item .val { font-size: 14px; font-weight:500; color:#fff; }
+.hero-ctas { display:flex; gap:12px; margin-top:22px; flex-wrap:wrap; }
+.hero-quicklinks { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;}
+.hero-quicklinks a.pill { text-decoration:none; cursor:pointer; }
+
+/* ===== Table ===== */
+.table-wrap { overflow-x:auto; border-radius: 14px; border: 1px solid var(--line); }
+table { width:100%; border-collapse: collapse; font-size: 13px; min-width: 720px; }
+th { text-align:left; background: var(--card-bg-2); color: var(--ifs-grey-2); font-size:11px; text-transform:uppercase; letter-spacing:0.05em; padding: 12px 14px; font-weight:600; position:sticky; top:0; }
+td { padding: 12px 14px; border-top: 1px solid var(--line); color: var(--ifs-grey-3); vertical-align:top; }
+tr:hover td { background: rgba(255,255,255,0.03); }
+.stage-badge { font-size:10.5px; padding:3px 9px; border-radius:999px; white-space:nowrap; }
+.stage-Awareness { background: rgba(114,201,248,0.18); color: var(--ifs-blue); }
+.stage-Consideration { background: rgba(205,146,255,0.18); color: var(--ifs-lilac); }
+.stage-Evaluation { background: rgba(132,39,226,0.25); color: #d9b3ff; }
+.stage-Decision { background: rgba(51,255,148,0.15); color: var(--ifs-green); }
+.stage-Expansion { background: rgba(255,205,90,0.18); color: var(--ifs-yellow); }
+
+.search-bar { display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+.search-bar input, .search-bar select {
+  background: var(--card-bg); border:1px solid var(--line); color:#fff; border-radius:10px;
+  padding: 10px 14px; font-family: var(--ifs-font); font-size:13px;
+}
+.search-bar input { flex:1; min-width:220px; }
+
+/* ===== Accordion ===== */
+.accordion-item { border: 1px solid var(--line); border-radius: 14px; margin-bottom: 10px; overflow:hidden; background: var(--card-bg); }
+.accordion-head { display:flex; align-items:center; justify-content:space-between; padding: 16px 20px; cursor:pointer; user-select:none; }
+.accordion-head h4 { margin:0; font-size:14.5px; }
+.accordion-head .chev { transition: transform .2s; stroke: var(--ifs-grey-2); }
+.accordion-item.open .chev { transform: rotate(180deg); }
+.accordion-body { max-height:0; overflow:hidden; transition: max-height .3s ease; padding: 0 20px; }
+.accordion-item.open .accordion-body { padding: 0 20px 18px; }
+
+/* ===== Persona / Region cards ===== */
+.persona-card, .region-card { background: var(--card-bg); border:1px solid var(--line); border-radius:16px; padding:22px; }
+.persona-card h3, .region-card h3 { font-size:17px; margin-bottom:2px; }
+.persona-card .role-tag, .region-card .role-tag { font-size:11px; color: var(--ifs-blue); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:14px; display:block;}
+.field-block { margin-bottom: 12px; }
+.field-block .fk { font-size: 10.5px; text-transform:uppercase; letter-spacing:0.06em; color: var(--ifs-grey-2); margin-bottom:4px; font-weight:600;}
+.field-block ul { margin:0; padding-left:18px; }
+.field-block li { color: var(--ifs-grey-3); font-size:13px; margin-bottom:3px; line-height:1.5;}
+.field-block p { font-size:13px; margin:0; }
+
+/* ===== Journey ===== */
+.journey-track { display:flex; gap:0; margin-bottom: 24px; border-radius: 14px; overflow:hidden; border:1px solid var(--line); }
+.journey-stage { flex:1; padding: 14px 10px; text-align:center; font-size:12px; font-weight:600; border-right:1px solid var(--line); }
+.journey-stage:last-child{border-right:none;}
+.js-Awareness{background:rgba(114,201,248,0.15); color:var(--ifs-blue);}
+.js-Consideration{background:rgba(205,146,255,0.15); color:var(--ifs-lilac);}
+.js-Evaluation{background:rgba(132,39,226,0.2); color:#d9b3ff;}
+.js-Decision{background:rgba(51,255,148,0.13); color:var(--ifs-green);}
+.js-Expansion{background:rgba(255,205,90,0.15); color:var(--ifs-yellow);}
+
+/* ===== Content map ===== */
+.map-wrap { position:relative; width:100%; max-width: 900px; margin: 0 auto; aspect-ratio: 1/0.85; }
+.map-node { position:absolute; transform: translate(-50%,-50%); background: var(--card-bg); border:1px solid var(--line); border-radius:12px; padding:9px 13px; font-size:11.5px; font-weight:500; text-align:center; white-space:nowrap; box-shadow: 0 4px 18px rgba(0,0,0,0.35); }
+.map-node.hub { background: linear-gradient(135deg, var(--ifs-purple), var(--ifs-dark-purple)); font-size:13px; font-weight:600; padding:16px 20px; border-radius:16px; z-index:2; white-space:normal; max-width: 190px;}
+.map-svg { position:absolute; inset:0; width:100%; height:100%; }
+
+/* ===== KPI dashboard bars ===== */
+.bar-row { display:flex; align-items:center; gap:14px; margin-bottom: 14px; }
+.bar-label { width: 170px; font-size:12.5px; color: var(--ifs-grey-3); flex-shrink:0; }
+.bar-track { flex:1; height:10px; background: rgba(255,255,255,0.08); border-radius:999px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:999px; background: linear-gradient(90deg, var(--ifs-purple), var(--ifs-blue)); }
+.bar-val { width:56px; text-align:right; font-size:13px; font-weight:600; color:#fff; }
+
+.two-col { display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px; }
+@media (max-width: 900px){ .two-col{grid-template-columns:1fr;} }
+
+.num-badge { width:26px;height:26px;border-radius:50%; background: rgba(132,39,226,0.3); color:var(--ifs-lilac); display:inline-flex;align-items:center;justify-content:center; font-size:12px; font-weight:600; flex-shrink:0; }
+.list-num { display:flex; gap:12px; margin-bottom:12px; align-items:flex-start; }
+.list-num p { margin:0; color:#fff; font-size:13.5px; padding-top:3px;}
+
+footer.hub-footer { padding: 30px 32px 60px; color: var(--ifs-grey-2); font-size:11.5px; border-top:1px solid var(--line); margin-top:20px;}
+
+/* ===== Password gate ===== */
+#lockScreen {
+  position: fixed; inset: 0; z-index: 999;
+  display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(132,39,226,0.5) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 85%, rgba(54,0,101,0.9) 0%, #170430 65%);
+  padding: 20px;
+}
+#lockScreen.hidden { display:none; }
+.lock-card { width: 100%; max-width: 380px; background: var(--card-bg); border:1px solid var(--line); border-radius:18px; padding: 34px 30px; text-align:center; }
+.lock-mark { width:44px;height:44px; border-radius:50%; margin: 0 auto 18px; background: conic-gradient(from 0deg, var(--ifs-purple), var(--ifs-blue), var(--ifs-lilac), var(--ifs-purple)); }
+.lock-card h2 { font-size:19px; margin-bottom:6px; }
+.lock-card p.desc { font-size:13px; margin-bottom:20px; }
+.lock-card input {
+  width:100%; background: rgba(255,255,255,0.06); border:1px solid var(--line); color:#fff;
+  border-radius:10px; padding: 12px 14px; font-family: var(--ifs-font); font-size:14px; margin-bottom:12px;
+  text-align:center;
+}
+.lock-card input:focus { outline:none; border-color: var(--ifs-blue); }
+.lock-card .btn { width:100%; justify-content:center; }
+.lock-error { color: var(--ifs-orange); font-size:12.5px; margin: -4px 0 12px; display:none; }
+.lock-error.show { display:block; }
+.lock-note { font-size:10.5px; color: var(--ifs-grey-2); margin-top:16px; }
+body.locked { overflow:hidden; }
+</style>
+</head>
+<body class="locked">
+
+<div id="lockScreen">
+  <div class="lock-card">
+    <div class="lock-mark"></div>
+    <h2>Campaign hub access</h2>
+    <p class="desc">Enter the password to view the 2026 Client Value Assessment Report campaign hub.</p>
+    <input type="password" id="lockInput" placeholder="Password" onkeydown="if(event.key==='Enter') checkPassword()">
+    <div class="lock-error" id="lockError">Incorrect password. Please try again.</div>
+    <button class="btn btn-blue" onclick="checkPassword()" style="width:100%;justify-content:center;">Unlock hub</button>
+    <div class="lock-note">Internal IFS Copperleaf enablement content. For authorized team use only.</div>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-home" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-8 9 8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10v10h14V10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.2 6.8L21 11l-6.8 2.2L12 20l-2.2-6.8L3 11l6.8-2.2L12 2z" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H8l-4 4V4z" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke-width="2"/><path d="M2 20c0-3.3 3-6 7-6s7 2.7 7 6" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="8" r="2.5" stroke-width="2"/><path d="M16 14.2c2.7.4 5 2.4 5 5.8" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M3 12h18M12 3c2.8 2.5 4.2 5.6 4.2 9s-1.4 6.5-4.2 9c-2.8-2.5-4.2-5.6-4.2-9s1.4-6.5 4.2-9z" stroke-width="2"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24" fill="none"><circle cx="5" cy="6" r="2.5" stroke-width="2"/><circle cx="19" cy="18" r="2.5" stroke-width="2"/><path d="M7 6h7a4 4 0 014 4v0a4 4 0 01-4 4H7" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24" fill="none"><path d="M3 6h6l2 2h10v11H3V6z" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-brief" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="12" rx="2" stroke-width="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" stroke-width="2"/></symbol>
+  <symbol id="i-mega" viewBox="0 0 24 24" fill="none"><path d="M3 10v4h3l6 4V6l-6 4H3z" stroke-width="2" stroke-linejoin="round"/><path d="M17 9a4 4 0 010 6" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-headset" viewBox="0 0 24 24" fill="none"><path d="M4 13v-1a8 8 0 0116 0v1" stroke-width="2" stroke-linecap="round"/><rect x="2.5" y="13" width="4" height="6" rx="1.5" stroke-width="2"/><rect x="17.5" y="13" width="4" height="6" rx="1.5" stroke-width="2"/></symbol>
+  <symbol id="i-chartbar" viewBox="0 0 24 24" fill="none"><path d="M4 20V10M12 20V4M20 20v-7" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24" fill="none"><path d="M12 3l2.6 5.9 6.4.6-4.8 4.3 1.4 6.3L12 17l-5.6 3.1 1.4-6.3-4.8-4.3 6.4-.6L12 3z" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-network" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="4" r="2" stroke-width="2"/><circle cx="5" cy="19" r="2" stroke-width="2"/><circle cx="19" cy="19" r="2" stroke-width="2"/><path d="M12 6v6M12 12L6 17M12 12l6 5" stroke-width="2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
+
+<div class="app">
+
+  <button class="menu-toggle" id="menuToggle"><svg width="20" height="20"><use href="#i-menu"/></svg></button>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="brand-row">
+      <div class="brand-mark"></div>
+      <div class="brand-text">Campaign hub<span>IFS Copperleaf</span></div>
+    </div>
+
+    <div class="nav-group-label">Overview</div>
+    <button class="nav-btn active" data-tab="home"><svg><use href="#i-home"/></svg>Home</button>
+    <button class="nav-btn" data-tab="why"><svg><use href="#i-spark"/></svg>Why it matters</button>
+    <button class="nav-btn" data-tab="messaging"><svg><use href="#i-chat"/></svg>Messaging framework</button>
+
+    <div class="nav-group-label">Audience &amp; markets</div>
+    <button class="nav-btn" data-tab="personas"><svg><use href="#i-users"/></svg>Audience personas</button>
+    <button class="nav-btn" data-tab="regional"><svg><use href="#i-globe"/></svg>Regional playbooks</button>
+    <button class="nav-btn" data-tab="journey"><svg><use href="#i-route"/></svg>Buyer journey</button>
+
+    <div class="nav-group-label">Enablement</div>
+    <button class="nav-btn" data-tab="assets"><svg><use href="#i-folder"/></svg>Asset library</button>
+    <button class="nav-btn" data-tab="sales"><svg><use href="#i-brief"/></svg>Sales enablement</button>
+    <button class="nav-btn" data-tab="marketing"><svg><use href="#i-mega"/></svg>Marketing enablement</button>
+    <button class="nav-btn" data-tab="cs"><svg><use href="#i-headset"/></svg>CS &amp; solution consulting</button>
+
+    <div class="nav-group-label">Proof &amp; data</div>
+    <button class="nav-btn" data-tab="stats"><svg><use href="#i-chartbar"/></svg>Stats dashboard</button>
+    <button class="nav-btn" data-tab="highlights"><svg><use href="#i-star"/></svg>Report highlights</button>
+    <button class="nav-btn" data-tab="contentmap"><svg><use href="#i-network"/></svg>Content map</button>
+
+    <div class="nav-group-label">Operating model</div>
+    <button class="nav-btn" data-tab="governance"><svg><use href="#i-shield"/></svg>Governance</button>
+
+    <div class="sidebar-foot">2026 Client Value Assessment Report campaign · Internal enablement hub · v1.0</div>
+  </nav>
+
+  <div class="main">
+    <div class="topbar">
+      <div>
+        <div class="breadcrumb" id="crumbText">Campaign hub / Home</div>
+        <h2 id="topTitle">Home</h2>
+      </div>
+      <div class="status-pill"><span class="dot"></span> Campaign live</div>
+    </div>
+
+    <!-- ============ HOME ============ -->
+    <section class="section active" id="tab-home">
+      <div class="hero">
+        <div class="eyebrow">2026 Client Value Assessment Report · Global campaign</div>
+        <h1>The proof behind <span class="gradient-text">value-based capital planning.</span></h1>
+        <p class="desc">Everything Marketing, Sales, Customer Success, and Solution Consulting need to position, sell, and deliver value using the 2026 Client Value Assessment Report — the definitive, data-backed proof point that IFS Copperleaf drives measurable enterprise outcomes.</p>
+        <div class="hero-ctas">
+          <button class="btn btn-blue" onclick="goTab('highlights')">View report highlights <svg width="14" height="14"><use href="#i-arrow" style="transform:rotate(-90deg)"/></svg></button>
+          <button class="btn btn-outline" onclick="goTab('assets')">Browse asset library</button>
+        </div>
+        <div class="hero-quicklinks">
+          <a class="pill blue" href="https://engage.copperleaf.com/494c73" target="_blank" rel="noopener">Folloze ABM board ↗</a>
+          <a class="pill blue" href="https://www.copperleaf.com/knowledge-hub/2026-client-value-assessment-report/" target="_blank" rel="noopener">WordPress knowledge hub ↗</a>
+          <span class="pill" onclick="goTab('assets')" style="cursor:pointer">SharePoint asset folder →</span>
+        </div>
+        <div class="hero-meta">
+          <div class="item"><span class="label">Campaign status</span><span class="val">🟢 Live</span></div>
+          <div class="item"><span class="label">Owner</span><span class="val">Global Campaigns Team</span></div>
+          <div class="item"><span class="label">Launch date</span><span class="val">Q3 2026</span></div>
+          <div class="item"><span class="label">Primary KPI</span><span class="val">MQLs → Business Value Assessment conversations</span></div>
+        </div>
+      </div>
+
+      <h3>Business value at a glance</h3>
+      <div class="grid grid-4" style="margin-bottom:26px;">
+        <div class="kpi-card"><svg class="icon"><use href="#i-chartbar"/></svg><div class="kpi-value">$48M</div><div class="kpi-label">Average annual enterprise value realized per organization</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-spark"/></svg><div class="kpi-value">30%</div><div class="kpi-label">Planning productivity gain</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-shield"/></svg><div class="kpi-value">9%</div><div class="kpi-label">Capital efficiency improvement</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-globe"/></svg><div class="kpi-value">80+</div><div class="kpi-label">Clients benchmarked, across 5 continents</div></div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3>What this hub gives you</h3>
+          <div class="card" style="margin-bottom:12px;">
+            <h4>A single source of truth</h4>
+            <p>Every team — from Regional Marketing to Solution Consulting — works from the same messaging, the same proof points, and the same asset locations. No more hunting for the latest deck or wondering which stat is current.</p>
+          </div>
+          <div class="card">
+            <h4>Enablement, not summary</h4>
+            <p>This hub doesn't just repeat the report. It translates its findings into personas to target, objections to handle, regional plays to run, and assets to use at each stage of the buyer journey.</p>
+          </div>
+        </div>
+        <div>
+          <h3>Start here</h3>
+          <div class="accordion-item" style="margin-bottom:8px;">
+            <div class="card" style="cursor:pointer" onclick="goTab('why')"><span class="label">01 · Strategy</span><h4>Why this report matters</h4><p style="margin:0;font-size:13px;">The executive narrative behind the numbers.</p></div>
+          </div>
+          <div class="card" style="cursor:pointer;margin-bottom:8px;" onclick="goTab('personas')"><span class="label">02 · Audience</span><h4>Find your persona</h4><p style="margin:0;font-size:13px;">Goals, objections, and messaging by role.</p></div>
+          <div class="card" style="cursor:pointer" onclick="goTab('sales')"><span class="label">03 · Sell it</span><h4>Sales enablement kit</h4><p style="margin:0;font-size:13px;">Pitches, discovery questions, ROI talking points.</p></div>
+        </div>
+      </div>
+
+      <hr class="hr">
+      <h3>Executive summary</h3>
+      <div class="grid grid-2">
+        <div class="card">
+          <h4>What this campaign is</h4>
+          <p>A global enablement and demand campaign built around the 2026 Client Value Assessment Report — an independent benchmarking study of more than 80 IFS Copperleaf clients across five continents, collectively managing over $100 billion in capital annually.</p>
+          <h4 style="margin-top:14px;">Why it exists</h4>
+          <p>Asset-intensive organizations are entering a decade of unprecedented capital investment, and buying committees increasingly demand proof, not promises. This report gives every customer-facing team a credible, quantified answer to "does this actually work?"</p>
+        </div>
+        <div class="card">
+          <h4>Why it's different from a typical whitepaper</h4>
+          <p>It isn't a point-of-view piece or a set of hand-picked anecdotes. It's aggregated, benchmarked outcome data across a large, diverse client base — which is exactly what skeptical CFOs, regulators, and boards respond to.</p>
+          <h4 style="margin-top:14px;">Why benchmark reports build trust</h4>
+          <p>Prospects discount vendor claims. They don't discount a pattern of results repeated across 80+ organizations, multiple industries, and five continents. Benchmarking converts a sales pitch into an evidence base.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHY IT MATTERS ============ -->
+    <section class="section" id="tab-why">
+      <div class="eyebrow">Executive narrative</div>
+      <h1 class="page-title">Why this report matters</h1>
+      <p class="page-sub">The industry backdrop that makes value-based, optimized capital planning an urgent, board-level priority — not a nice-to-have.</p>
+
+      <div class="grid grid-2" style="margin-bottom:22px;">
+        <div class="card">
+          <h4>The capital investment wave</h4>
+          <p>Utilities alone are projected to invest more than $1.4 trillion through 2030 to modernize infrastructure, expand grid capacity, support electrification, and meet regulatory and ESG obligations — while still balancing reliability, resilience, affordability, and shareholder expectations.</p>
+        </div>
+        <div class="card">
+          <h4>Legacy tools have run out of road</h4>
+          <p>Siloed spreadsheets and static, ranking-based prioritization cannot manage enterprise-wide portfolios worth billions of dollars. The complexity of modern capital decisions has outgrown the tools most organizations still rely on.</p>
+        </div>
+      </div>
+
+      <h3>Seven forces converging on capital planning</h3>
+      <div class="grid grid-3" style="margin-bottom:24px;">
+        <div class="card"><span class="label">Regulatory complexity</span><p>Boards and regulators expect quantified, defensible rationale for every dollar requested — not narrative justification.</p></div>
+        <div class="card"><span class="label">Planning maturity</span><p>Organizations that formalize asset hierarchy, ownership, and governance make more consistent decisions cycle over cycle.</p></div>
+        <div class="card"><span class="label">Decision transparency</span><p>Stakeholders want to see, and challenge, the trade-offs behind a plan — not just the plan itself.</p></div>
+        <div class="card"><span class="label">Optimization vs. prioritization</span><p>Independent research (University of Southampton) found mathematical optimization outperforms ranking-based prioritization by 7–20%.</p></div>
+        <div class="card"><span class="label">Scenario planning</span><p>Leaders increasingly need to test funding levels, timing, and constraints before committing capital — not after.</p></div>
+        <div class="card"><span class="label">Value-based investment planning</span><p>A shared, quantitative definition of value turns portfolio debates from subjective to defensible.</p></div>
+      </div>
+
+      <h3>Benchmark statistics that anchor every conversation</h3>
+      <div class="grid grid-3">
+        <div class="kpi-card"><div class="kpi-value">9%</div><div class="kpi-label">Portfolio economic value improvement through optimized capital allocation</div></div>
+        <div class="kpi-card"><div class="kpi-value">12%</div><div class="kpi-label">Reduction in asset-related maintenance costs</div></div>
+        <div class="kpi-card"><div class="kpi-value">30%</div><div class="kpi-label">Improvement in capital planning team productivity</div></div>
+        <div class="kpi-card"><div class="kpi-value">10%</div><div class="kpi-label">Reduction in budget-to-actual variance</div></div>
+        <div class="kpi-card"><div class="kpi-value">20%+</div><div class="kpi-label">Improvement in funding approval outcomes with scenario-supported submissions</div></div>
+        <div class="kpi-card"><div class="kpi-value">96 bps</div><div class="kpi-label">Average ROIC increase within 3 years of implementation (publicly reporting clients)</div></div>
+      </div>
+
+      <div class="callout proof" style="margin-top:22px;">
+        <span class="tag">Why this lands with executives</span>
+        <p>A 100-basis-point increase in ROIC equates to roughly $10M in additional annual operating profit for every $1B of invested capital — a direct line from the platform to the P&amp;L that CFOs immediately understand.</p>
+      </div>
+    </section>
+
+    <!-- ============ MESSAGING FRAMEWORK ============ -->
+    <section class="section" id="tab-messaging">
+      <div class="eyebrow">Positioning &amp; narrative</div>
+      <h1 class="page-title">Campaign messaging framework</h1>
+      <p class="page-sub">Consistent messaging by funnel stage, plus the message hierarchy every team should build from.</p>
+
+      <h3>Funnel messaging</h3>
+      <div class="grid grid-3" style="margin-bottom:10px;" id="funnelGrid"></div>
+
+      <hr class="hr">
+      <h3>Message hierarchy</h3>
+      <p style="margin-bottom:16px;">Every asset in this campaign should trace back to this hierarchy — corporate message at the top, sales conversation at the point of execution.</p>
+      <div id="hierarchyList"></div>
+    </section>
+
+    <!-- ============ PERSONAS ============ -->
+    <section class="section" id="tab-personas">
+      <div class="eyebrow">Audience &amp; messaging</div>
+      <h1 class="page-title">Audience personas</h1>
+      <p class="page-sub">Goals, pain points, messaging, and recommended assets for every stakeholder in the buying committee and delivery lifecycle.</p>
+      <div class="search-bar">
+        <input id="personaSearch" placeholder="Search personas (e.g. Finance, Regulatory, Sales)..." oninput="filterPersonas()">
+      </div>
+      <div class="grid grid-2" id="personaGrid"></div>
+    </section>
+
+    <!-- ============ REGIONAL ============ -->
+    <section class="section" id="tab-regional">
+      <div class="eyebrow">Field &amp; regional marketing</div>
+      <h1 class="page-title">Regional playbooks</h1>
+      <p class="page-sub">How each region should localize the campaign message, proof points, and call to action.</p>
+      <div class="grid grid-2" id="regionGrid"></div>
+    </section>
+
+    <!-- ============ BUYER JOURNEY ============ -->
+    <section class="section" id="tab-journey">
+      <div class="eyebrow">Demand &amp; enablement mapping</div>
+      <h1 class="page-title">Buyer journey &amp; asset mapping</h1>
+      <p class="page-sub">Which asset to use, at which stage, and which team owns the moment.</p>
+      <div class="journey-track">
+        <div class="journey-stage js-Awareness">Awareness</div>
+        <div class="journey-stage js-Consideration">Consideration</div>
+        <div class="journey-stage js-Evaluation">Evaluation</div>
+        <div class="journey-stage js-Decision">Decision</div>
+        <div class="journey-stage js-Expansion">Expansion</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Asset</th><th>Stage</th><th>Team to use it</th><th>How it's used</th></tr></thead>
+          <tbody id="journeyBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ ASSET LIBRARY ============ -->
+    <section class="section" id="tab-assets">
+      <div class="eyebrow">Where everything lives</div>
+      <h1 class="page-title">Asset library</h1>
+      <p class="page-sub">Search or filter to find the right asset, its purpose, owner, and exact location.</p>
+      <div class="search-bar">
+        <input id="assetSearch" placeholder="Search assets..." oninput="filterAssets()">
+        <select id="assetStageFilter" onchange="filterAssets()">
+          <option value="">All stages</option>
+          <option>Awareness</option><option>Consideration</option><option>Evaluation</option><option>Decision</option><option>Expansion</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Asset</th><th>Purpose</th><th>Audience</th><th>Owner</th><th>Stage</th><th>Location</th><th>Notes</th></tr></thead>
+          <tbody id="assetBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ SALES ENABLEMENT ============ -->
+    <section class="section" id="tab-sales">
+      <div class="eyebrow">Sales &amp; sales engineering</div>
+      <h1 class="page-title">Sales enablement</h1>
+      <p class="page-sub">Pitches, discovery questions, ROI talking points, and objection handling — ready to use in the next call.</p>
+
+      <div class="grid grid-2" style="margin-bottom:18px;">
+        <div class="card">
+          <h4>Elevator pitch (10 seconds)</h4>
+          <p>IFS Copperleaf helps asset-intensive organizations turn billion-dollar capital portfolios into optimized, defensible investment plans — and the 2026 benchmark study shows clients realize $48M in average annual enterprise value doing it.</p>
+        </div>
+        <div class="card">
+          <h4>30-second pitch</h4>
+          <p>Capital-intensive organizations are under pressure to invest more, justify every dollar, and hit reliability, regulatory, and ESG targets at the same time. Most are still using spreadsheets and static ranking to make billion-dollar decisions. IFS Copperleaf replaces that with value-based optimization — and independent benchmarking across 80+ clients shows 9% higher portfolio value, 30% faster planning, and 20%+ better funding outcomes.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:18px;">
+        <h4>2-minute pitch / executive conversation guide</h4>
+        <div class="grid grid-2" style="margin-top:10px;">
+          <div>
+            <p><strong style="color:#fff;">Open with the pressure:</strong> Reference the $1.4T utility capital wave through 2030, and the fact that legacy prioritization tools weren't built for portfolios this large or this scrutinized.</p>
+            <p><strong style="color:#fff;">Introduce the shift:</strong> Move the conversation from "prioritization" to "optimization" — the University of Southampton found optimization delivers 7–20% more portfolio value than ranking-based approaches under identical constraints.</p>
+          </div>
+          <div>
+            <p><strong style="color:#fff;">Prove it:</strong> Cite the benchmark: 80+ clients, 5 continents, $100B+ capital managed, $48M average annual enterprise value, 96 bps ROIC lift in 3 years.</p>
+            <p><strong style="color:#fff;">Close with a next step:</strong> Offer a tailored Business Value Assessment to quantify what these outcomes would look like inside their own portfolio.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3>Discovery questions</h3>
+          <div class="card">
+            <ul style="margin:0;padding-left:18px;color:var(--ifs-grey-3);font-size:13.5px;line-height:1.9;">
+              <li>How is your organization defining "value" across capital projects today — consistently, or differently by region or business unit?</li>
+              <li>How much of your current capital plan is built through ranking or cut-line prioritization versus true optimization?</li>
+              <li>When funding gets cut or reallocated, how long does it take to understand the risk and service impact?</li>
+              <li>How defensible is your current plan in front of a regulator, board, or investor — can you quantify trade-offs on demand?</li>
+              <li>How connected is your planning process to actual execution and delivery feedback?</li>
+              <li>What would a 9% improvement in portfolio value or a 30% planning productivity gain be worth to your organization this year?</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <h3>ROI talking points</h3>
+          <div class="card">
+            <div class="list-num"><span class="num-badge">1</span><p>$48M average annual enterprise value realized per organization in the study.</p></div>
+            <div class="list-num"><span class="num-badge">2</span><p>96 bps ROIC improvement ≈ $10M additional annual operating profit per $1B invested, per 100 bps.</p></div>
+            <div class="list-num"><span class="num-badge">3</span><p>Planning cycles cut in half in multiple client examples (12 weeks → 6 weeks; 2 months → less than 1 week).</p></div>
+            <div class="list-num"><span class="num-badge">4</span><p>One client eliminated ~$10M in forecasting variance annually after integrating Copperleaf as system of record.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="hr">
+      <h3>Competitive positioning</h3>
+      <div class="grid grid-2" style="margin-bottom:18px;">
+        <div class="card"><h4>Lead with optimization, not prioritization</h4><p>Most alternatives — including spreadsheets and legacy scoring tools — rank and cut. IFS Copperleaf optimizes the portfolio as an interconnected system. This is the single clearest differentiator in every competitive conversation.</p></div>
+        <div class="card"><h4>Lead with the Copperleaf Value Framework</h4><p>Position it as the decision-making framework that aligns investment decisions with corporate strategy on a common economic scale — never as a scoring tool or reporting dashboard.</p></div>
+      </div>
+
+      <h3>Objection handling</h3>
+      <div id="objectionAccordion"></div>
+
+      <h3 style="margin-top:20px;">Recommended follow-up assets</h3>
+      <div class="grid grid-3">
+        <div class="card"><span class="label">After discovery</span><h4>2026 Client Value Assessment Report (PDF)</h4></div>
+        <div class="card"><span class="label">After qualification</span><h4>Tailored Business Value Assessment</h4></div>
+        <div class="card"><span class="label">Before close</span><h4>Relevant regional/industry case study &amp; executive briefing</h4></div>
+      </div>
+    </section>
+
+    <!-- ============ MARKETING ENABLEMENT ============ -->
+    <section class="section" id="tab-marketing">
+      <div class="eyebrow">Global &amp; regional marketing</div>
+      <h1 class="page-title">Marketing enablement</h1>
+      <p class="page-sub">Campaign strategy, channel recommendations, and content plans built around the report.</p>
+      <div class="grid grid-2" id="marketingGrid"></div>
+    </section>
+
+    <!-- ============ CS & SOLUTION CONSULTING ============ -->
+    <section class="section" id="tab-cs">
+      <div class="eyebrow">Post-sale &amp; technical enablement</div>
+      <h1 class="page-title">Customer success &amp; solution consulting</h1>
+      <p class="page-sub">How to use benchmark data across the customer lifecycle — not just before the sale.</p>
+
+      <h3>Customer Success</h3>
+      <div class="grid grid-3" style="margin-bottom:22px;">
+        <div class="card"><h4>Executive Business Reviews</h4><p>Benchmark the customer's realized value against the study averages (9% capital efficiency, 12% maintenance reduction, 30% planning productivity) to demonstrate ROI trajectory.</p></div>
+        <div class="card"><h4>Renewals</h4><p>Anchor renewal conversations in cumulative enterprise value delivered, using the $48M average as a comparison point — not just feature usage.</p></div>
+        <div class="card"><h4>Expansion</h4><p>Use industry-specific outcomes (e.g. UK water: 61% carbon reduction; NA integrated energy: $230M in low-value spend removed) to identify adjacent use cases for expansion.</p></div>
+        <div class="card"><h4>Business Value Assessments</h4><p>Reframe BVAs around the study's five measurement dimensions: capital efficiency, OPEX/maintenance, planning productivity, execution accuracy, and funding/regulatory outcomes.</p></div>
+        <div class="card"><h4>Roadmap conversations</h4><p>Reference the "mature organizations" practices (enterprise-wide visibility, planning-execution integration, governance maturity) as the roadmap for customers still early in adoption.</p></div>
+      </div>
+
+      <h3>Solution Consulting</h3>
+      <div class="grid grid-3">
+        <div class="card"><h4>Workshops</h4><p>Open workshops with the industry pressure narrative ($1.4T utility capital wave) to frame why optimization — not just software adoption — is the goal.</p></div>
+        <div class="card"><h4>Demos</h4><p>Demo the shift from ranking/cut-line prioritization to true optimization, referencing the University of Southampton finding of 7–20% higher portfolio value.</p></div>
+        <div class="card"><h4>Discovery</h4><p>Use the discovery questions in the Sales Enablement tab to uncover current planning maturity and identify which of the five outcome dimensions matters most to this prospect.</p></div>
+        <div class="card"><h4>Value engineering</h4><p>Model potential enterprise value using the study's benchmark ranges — being transparent that individual results vary by baseline maturity and portfolio scale.</p></div>
+        <div class="card"><h4>Business cases</h4><p>Build the business case around the same five dimensions used in the study, so the case mirrors a methodology the prospect can trust because it's already been benchmarked externally.</p></div>
+        <div class="card"><h4>Executive presentations</h4><p>Use the ROIC translation ($10M in operating profit per 100bps per $1B invested) to make the value case land in financial terms the C-suite already speaks.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ STATS DASHBOARD ============ -->
+    <section class="section" id="tab-stats">
+      <div class="eyebrow">Key statistics</div>
+      <h1 class="page-title">Stats dashboard</h1>
+      <p class="page-sub">The full benchmark data set, visualized for quick reference in any conversation.</p>
+
+      <div class="grid grid-3" style="margin-bottom:24px;">
+        <div class="kpi-card"><svg class="icon"><use href="#i-chartbar"/></svg><div class="kpi-value">$48M</div><div class="kpi-label">Average annual enterprise value realized</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-spark"/></svg><div class="kpi-value">9%</div><div class="kpi-label">Capital efficiency improvement</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-route"/></svg><div class="kpi-value">30%</div><div class="kpi-label">Planning productivity gain</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-arrow"/></svg><div class="kpi-value">10%</div><div class="kpi-label">Improvement in forecast accuracy</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-shield"/></svg><div class="kpi-value">20%+</div><div class="kpi-label">Improvement in funding outcomes</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-star"/></svg><div class="kpi-value">12%</div><div class="kpi-label">Maintenance cost reduction</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-users"/></svg><div class="kpi-value">80+</div><div class="kpi-label">Customers benchmarked</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-globe"/></svg><div class="kpi-value">$100B+</div><div class="kpi-label">Capital managed annually by study participants</div></div>
+        <div class="kpi-card"><svg class="icon"><use href="#i-network"/></svg><div class="kpi-value">96 bps</div><div class="kpi-label">Average ROIC improvement over 3 years</div></div>
+      </div>
+
+      <h3>Outcome improvement by category</h3>
+      <div class="card">
+        <div class="bar-row"><div class="bar-label">Planning productivity</div><div class="bar-track"><div class="bar-fill" style="width:30%"></div></div><div class="bar-val">+30%</div></div>
+        <div class="bar-row"><div class="bar-label">Funding outcomes</div><div class="bar-track"><div class="bar-fill" style="width:20%"></div></div><div class="bar-val">+20%</div></div>
+        <div class="bar-row"><div class="bar-label">Forecast accuracy</div><div class="bar-track"><div class="bar-fill" style="width:10%"></div></div><div class="bar-val">+10%</div></div>
+        <div class="bar-row"><div class="bar-label">Capital efficiency</div><div class="bar-track"><div class="bar-fill" style="width:9%"></div></div><div class="bar-val">+9%</div></div>
+        <div class="bar-row"><div class="bar-label">Maintenance cost</div><div class="bar-track"><div class="bar-fill" style="width:12%"></div></div><div class="bar-val">-12%</div></div>
+        <div class="bar-row"><div class="bar-label">Execution variance</div><div class="bar-track"><div class="bar-fill" style="width:7%"></div></div><div class="bar-val">-7%</div></div>
+      </div>
+      <p style="font-size:11.5px;margin-top:8px;">Bars scaled relative to a 30% maximum for visual comparison. Source: 2026 Client Value Assessment Report, aggregated client data.</p>
+
+      <hr class="hr">
+      <h3>Notable individual client outcomes</h3>
+      <div class="grid grid-3">
+        <div class="card"><span class="label">US utility</span><h4>20% O&amp;M performance improvement</h4><p>≈$25M in annual savings from risk-prioritized, bundled maintenance work.</p></div>
+        <div class="card"><span class="label">UK utility</span><h4>Risk-based maintenance transition</h4><p>≈$12M in annual maintenance savings after moving from frequency-based to risk/consequence-based planning.</p></div>
+        <div class="card"><span class="label">UK water company</span><h4>£50M in productivity &amp; portfolio benefits</h4><p>Alongside a 61% reduction in carbon impact through improved investment selection and timing.</p></div>
+        <div class="card"><span class="label">Multi-national transmission org</span><h4>80% improvement in bundling ratio</h4><p>≈£2.5M/year reduction in outage costs through circuit optimization.</p></div>
+        <div class="card"><span class="label">Grid modernization utility</span><h4>100% plan approval, 70% faster</h4><p>$6.8B in demonstrated benefits against a $2B investment proposal.</p></div>
+        <div class="card"><span class="label">NA integrated energy company</span><h4>$230M in low-value spend removed</h4><p>Across two operating sites, reallocated to enterprise risk priorities.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ REPORT HIGHLIGHTS ============ -->
+    <section class="section" id="tab-highlights">
+      <div class="eyebrow">Quick reference</div>
+      <h1 class="page-title">Report highlights</h1>
+      <p class="page-sub">The report distilled into the lists your team will reach for most.</p>
+
+      <div class="two-col" style="margin-bottom:20px;">
+        <div>
+          <h3>Top 10 insights</h3>
+          <div id="topInsights"></div>
+        </div>
+        <div>
+          <h3>Top executive takeaways</h3>
+          <div id="topExec"></div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3>Top customer outcomes</h3>
+          <div id="topOutcomes"></div>
+        </div>
+        <div>
+          <h3>Top proof points</h3>
+          <div id="topProof"></div>
+        </div>
+      </div>
+
+      <hr class="hr">
+      <div class="grid grid-2">
+        <div>
+          <h3>Top sales statistics</h3>
+          <div class="card">
+            <ul style="margin:0;padding-left:18px;color:var(--ifs-grey-3);font-size:13.5px;line-height:2;">
+              <li>$48M average annual enterprise value per organization</li>
+              <li>96 bps average ROIC increase in 3 years</li>
+              <li>20%+ improvement in funding approval outcomes</li>
+              <li>7–20% higher portfolio value from optimization vs. prioritization (University of Southampton)</li>
+              <li>50% typical reduction in plan creation time</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <h3>Top marketing statistics</h3>
+          <div class="card">
+            <ul style="margin:0;padding-left:18px;color:var(--ifs-grey-3);font-size:13.5px;line-height:2;">
+              <li>80+ clients, 5 continents, $100B+ capital managed annually</li>
+              <li>9% capital efficiency, 12% maintenance cost reduction, 30% planning productivity gain</li>
+              <li>61% carbon impact reduction achieved by a UK water client</li>
+              <li>100% plan approval / 70% faster approval cycle for a grid modernization case</li>
+              <li>$10M in forecasting variance eliminated through system-of-record integration</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTENT MAP ============ -->
+    <section class="section" id="tab-contentmap">
+      <div class="eyebrow">How the assets connect</div>
+      <h1 class="page-title">Content map</h1>
+      <p class="page-sub">The report sits at the center of the campaign ecosystem — every other asset either feeds into it or is generated from it.</p>
+      <div class="map-wrap" id="mapWrap"></div>
+      <p style="text-align:center;font-size:11.5px;margin-top:10px;">Click a node's category color for reference — Blue: earned/organic, Lilac: paid/ABM, Green: sales &amp; proof, Yellow: internal systems.</p>
+    </section>
+
+    <!-- ============ GOVERNANCE ============ -->
+    <section class="section" id="tab-governance">
+      <div class="eyebrow">Operating model</div>
+      <h1 class="page-title">Campaign governance</h1>
+      <p class="page-sub">Ownership, consistency rules, and the KPIs this campaign is measured against.</p>
+
+      <div class="grid grid-2" style="margin-bottom:18px;">
+        <div class="card">
+          <h4>Campaign ownership</h4>
+          <p>The Global Campaigns Team owns the master narrative, core assets, and this hub. Regional Marketing owns localization within the approved messaging framework. Product Marketing owns messaging accuracy against the source report.</p>
+        </div>
+        <div class="card">
+          <h4>How regional teams should use it</h4>
+          <p>Localize the regional playbook's message and CTA; do not alter core statistics, the message hierarchy, or the Copperleaf Value Framework positioning without Product Marketing sign-off.</p>
+        </div>
+        <div class="card">
+          <h4>Brand &amp; messaging consistency</h4>
+          <p>All content must follow IFS brand guidelines (Midnight Purple / Euclid Circular A / pill CTAs) and the approved Copperleaf positioning: lead with optimization and the Value Framework, never reduce Copperleaf to a scoring or workflow tool.</p>
+        </div>
+        <div class="card">
+          <h4>Asset governance &amp; version control</h4>
+          <p>The 2026 Client Value Assessment Report PDF in SharePoint is the single source of truth for all statistics. Any derivative asset (deck, blog, ad) must cite figures exactly as published in the report — no rounding or extrapolation beyond what's stated.</p>
+        </div>
+      </div>
+
+      <h3>Reporting &amp; KPIs</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>KPI</th><th>Owner</th><th>Cadence</th><th>Target signal</th></tr></thead>
+          <tbody>
+            <tr><td>MQLs from campaign assets</td><td>Global Campaigns Team</td><td>Weekly</td><td>Growth vs. prior campaign baseline</td></tr>
+            <tr><td>Folloze ABM engagement</td><td>ABM / Field Marketing</td><td>Weekly</td><td>Named account engagement rate</td></tr>
+            <tr><td>Knowledge hub traffic &amp; downloads</td><td>Digital Marketing</td><td>Weekly</td><td>Report PDF download rate</td></tr>
+            <tr><td>Sales usage of enablement assets</td><td>Sales Enablement</td><td>Monthly</td><td>Deck / pitch adoption in CRM-logged calls</td></tr>
+            <tr><td>Business Value Assessments initiated</td><td>Solution Consulting</td><td>Monthly</td><td>Volume tied to campaign-sourced leads</td></tr>
+            <tr><td>Pipeline influenced</td><td>Marketing Ops</td><td>Monthly</td><td>Attributed opportunity value</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="hub-footer">
+      IFS Copperleaf — 2026 Client Value Assessment Report campaign hub. Internal enablement use only. All statistics sourced from the 2026 Client Value Assessment Report (Production: IFS, March 2026). Not for external distribution without Product Marketing review.
+    </footer>
+  </div>
+</div>
+
+<script>
+/* ---------------- Password gate ---------------- */
+const HUB_PASSWORD = 'Client Value Assessment';
+(function(){
+  const unlocked = sessionStorage.getItem('cva2026_hub_unlocked') === 'true';
+  if(unlocked){
+    document.getElementById('lockScreen').classList.add('hidden');
+    document.body.classList.remove('locked');
+  }
+})();
+function checkPassword(){
+  const input = document.getElementById('lockInput');
+  const err = document.getElementById('lockError');
+  if(input.value === HUB_PASSWORD){
+    sessionStorage.setItem('cva2026_hub_unlocked', 'true');
+    document.getElementById('lockScreen').classList.add('hidden');
+    document.body.classList.remove('locked');
+    err.classList.remove('show');
+  } else {
+    err.classList.add('show');
+    input.value = '';
+    input.focus();
+  }
+}
+document.addEventListener('DOMContentLoaded', function(){
+  const unlocked = sessionStorage.getItem('cva2026_hub_unlocked') === 'true';
+  if(!unlocked){ document.getElementById('lockInput').focus(); }
+});
+
+/* ---------------- Navigation ---------------- */
+const titles = {
+  home: 'Home', why: 'Why it matters', messaging: 'Messaging framework',
+  personas: 'Audience personas', regional: 'Regional playbooks', journey: 'Buyer journey',
+  assets: 'Asset library', sales: 'Sales enablement', marketing: 'Marketing enablement',
+  cs: 'CS & solution consulting', stats: 'Stats dashboard', highlights: 'Report highlights',
+  contentmap: 'Content map', governance: 'Governance'
+};
+function goTab(tab){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active', s.id === 'tab-'+tab));
+  document.getElementById('topTitle').textContent = titles[tab];
+  document.getElementById('crumbText').textContent = 'Campaign hub / ' + titles[tab];
+  window.scrollTo(0,0);
+  document.querySelector('.main').scrollTo && document.querySelector('.main').scrollTo(0,0);
+  if(window.innerWidth <= 900){ document.getElementById('sidebar').classList.remove('open'); }
+}
+document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click', ()=>goTab(b.dataset.tab)));
+document.getElementById('menuToggle').addEventListener('click', ()=>document.getElementById('sidebar').classList.toggle('open'));
+
+/* ---------------- Funnel messaging ---------------- */
+const funnel = [
+  {stage:'Awareness', msg:'Capital portfolios have outgrown spreadsheets. Asset-intensive organizations need a new way to prove value.'},
+  {stage:'Problem', msg:'Legacy prioritization can\'t account for interdependencies, timing, or resource constraints — and it shows in wasted capital and shaky regulatory submissions.'},
+  {stage:'Solution', msg:'IFS Copperleaf replaces ranking with optimization, built on the Copperleaf Value Framework — a common economic scale for every investment decision.'},
+  {stage:'Proof', msg:'Independent benchmarking across 80+ clients: $48M average annual enterprise value, 9% capital efficiency gain, 96 bps ROIC lift.'},
+  {stage:'Business outcomes', msg:'Stronger capital efficiency, lower maintenance cost, faster planning, better execution alignment, and more defensible regulatory outcomes.'},
+  {stage:'Call to action', msg:'See what your portfolio could realize — request a tailored Business Value Assessment.'}
+];
+document.getElementById('funnelGrid').innerHTML = funnel.map(f=>`
+  <div class="card"><span class="label">${f.stage}</span><p style="margin-top:8px;">${f.msg}</p></div>
+`).join('');
+
+const hierarchy = [
+  {level:'Corporate message', text:'IFS helps organizations deliver value at every stage of the asset lifecycle.'},
+  {level:'Campaign message', text:'The 2026 Client Value Assessment Report proves that value-based, optimized capital planning delivers measurable enterprise outcomes — at scale, across industries.'},
+  {level:'Industry message', text:'Utilities, transportation, and infrastructure operators face a $1.4T capital wave with legacy tools that cannot keep pace.'},
+  {level:'Persona message', text:'Tailored by role — see the Audience Personas tab for Finance, Regulatory, Engineering, Executive, and more.'},
+  {level:'Sales message', text:'Move the conversation from prioritization to optimization, and quantify what that shift is worth using the benchmark data.'}
+];
+document.getElementById('hierarchyList').innerHTML = hierarchy.map((h,i)=>`
+  <div class="list-num"><span class="num-badge">${i+1}</span><div><strong style="color:#fff;font-size:13.5px;">${h.level}</strong><p style="margin:2px 0 0;">${h.text}</p></div></div>
+`).join('');
+
+/* ---------------- Personas ---------------- */
+const personas = [
+  {name:'Executive leaders', tag:'C-suite / SVP', goals:['Enterprise resilience and strategic agility','Shareholder and board confidence','Capital productivity across the portfolio'], pain:['Difficulty proving capital plans are the best use of funds','Pressure to invest more while controlling risk','Fragmented visibility across business units'], msg:'Turn capital planning into a strategic advantage — quantify how every dollar invested drives reliability, safety, affordability, and sustainability outcomes.', assets:['2026 Client Value Assessment Report','Executive briefing','Folloze ABM board'], cta:'Request an executive briefing on portfolio-level value realization', objections:['"We already have a planning process" → Reframe: ranking-based prioritization is not the same as optimization; the gap is measurable (7–20%).'], proof:'$48M average annual enterprise value; 96 bps ROIC lift in 3 years.'},
+  {name:'Finance', tag:'CFO / Finance leadership', goals:['Capital efficiency and ROI','Governance over investment trade-offs','Regulatory and audit defensibility'], pain:['Inconsistent value definitions across business units','Difficulty defending capital asks to the board','Limited ability to model funding scenarios'], msg:'A consistent, quantifiable value framework that makes every capital trade-off explicit, comparable, and defensible.', assets:['Client Value Assessment Report (Section 2.3–2.4)','ROI/ROIC talking points','Regulatory outcomes case studies'], cta:'See the ROIC modeling behind a 96 bps improvement', objections:['"How do we know the ROI is real?" → Point to publicly reported ROIC data across the client base, not self-reported estimates alone.'], proof:'96 bps average ROIC increase = ~$10M added annual operating profit per $1B invested.'},
+  {name:'Regulatory', tag:'Regulatory affairs', goals:['Transparent, auditable investment rationale','Faster, cleaner approval cycles','Stronger stakeholder trust'], pain:['Narrative-based submissions that are hard to defend','Slow, iterative review cycles','Difficulty answering "what if funding changes?" in real time'], msg:'Move from narrative-based plans to quantified trade-offs that regulators, intervenors, and boards can trust.', assets:['Regulatory outcomes case study (Section 2.4.4)','Transparent regulatory submission example'], cta:'Explore how one utility achieved 100% plan approval, 70% faster', objections:['"Our regulatory environment is unique" → The value framework adapts to jurisdiction-specific criteria while keeping the underlying logic consistent and auditable.'], proof:'100% plan approval and 70% faster approval cycle in a grid modernization case; 18% capital budget increase successfully defended.'},
+  {name:'Asset management', tag:'Asset management leaders', goals:['Improved asset hierarchy and data quality','Risk-informed investment decisions','Long-term reliability and lifecycle value'], pain:['Inconsistent asset data undermining planning quality','Reactive, failure-driven interventions','Difficulty comparing investments across asset classes'], msg:'A common value framework that lets you compare risk and value across every asset class, on the same economic scale.', assets:['Client Value Assessment Report (Section 2.4.1)','Capital efficiency case studies'], cta:'Benchmark your asset hierarchy maturity', objections:['"Our asset data isn\'t clean enough yet" → Many clients started with the same challenge; maturity builds over successive planning cycles.'], proof:'9% average improvement in portfolio economic value; NA utility eliminated 5% of low-value spend.'},
+  {name:'Capital planning', tag:'Capital planning teams', goals:['Faster, more confident planning cycles','More scenarios evaluated per cycle','Reduced rework and late-stage changes'], pain:['Planning cycles that take months, not weeks','Manual, offline coordination across business units','Limited ability to re-plan when conditions change'], msg:'Move from annual planning events to continuous, scenario-based planning — with a single system of record.', assets:['Planning & execution case studies (Section 2.4.3)','Client Value Assessment Report'], cta:'See how planning cycles dropped from 12 weeks to 6', objections:['"Our planning process is too complex to change" → Clients report early wins even with partial scope, expanding coverage over time.'], proof:'30% average planning productivity gain; one client cut plan-build time from 2 months to under 1 week.'},
+  {name:'Engineering', tag:'Engineering & asset strategy', goals:['Technically sound, risk-based intervention plans','Better bundling and sequencing of work','Reduced outage and restoration impact'], pain:['Frequency-based maintenance driving inefficiency','Limited visibility into system-wide constraints','Difficulty justifying technical trade-offs to non-technical stakeholders'], msg:'Shift from frequency-based activity to risk and consequence-based optimization — evaluating maintenance as a coordinated portfolio, not a list of jobs.', assets:['OPEX efficiency case studies (Section 2.4.2)'], cta:'Explore the bundling & sequencing outcomes from transmission clients', objections:['"Risk-based planning requires data we don\'t have" → Value and outcomes compound as data quality and governance mature over time.'], proof:'80% improvement in bundling ratio; ~£2.5M/year reduction in outage costs (multi-national transmission client).'},
+  {name:'Operations', tag:'Operations leaders', goals:['Reliability and service continuity','Lower reactive/emergency work','Resource efficiency under constraints'], pain:['High reliance on reactive, unplanned work','Unclear which interventions reduce risk most','Coordination gaps between planning and delivery'], msg:'Reduce operational volatility by shifting from reactive response to targeted, risk-informed maintenance planning.', assets:['OPEX efficiency case studies','Maintenance cost reduction data'], cta:'See how a US utility saved $25M annually in O&M', objections:['"We\'re already stretched thin" → The improvements specifically target reducing reactive workload, freeing capacity rather than adding to it.'], proof:'12% average maintenance cost reduction; 20% O&M performance improvement in a US utility example.'},
+  {name:'Customer success', tag:'Post-sale / CSM', goals:['Demonstrable, ongoing customer value','Strong renewal and expansion conversations','Clear roadmap for customer maturity'], pain:['Difficulty quantifying value delivered since go-live','Renewal conversations anchored on usage, not outcomes','Limited visibility into expansion opportunities'], msg:'Anchor every customer conversation in the same benchmark dimensions used industry-wide — so value is provable, not anecdotal.', assets:['Client Value Assessment Report','Business Value Assessment framework'], cta:'Use the report benchmarks in your next Executive Business Review', objections:[], proof:'Customers benchmarked against $48M average annual enterprise value and the study\'s five outcome dimensions.'},
+  {name:'Partners', tag:'Channel & alliance partners', goals:['Credible, differentiated joint value proposition','Proof points to support co-selling','Clear guidance on positioning IFS Copperleaf'], pain:['Difficulty differentiating IFS Copperleaf from generic planning tools','Limited access to the latest proof points','Uncertainty on approved messaging'], msg:'Position IFS Copperleaf as the AI-powered Asset Investment Planning leader — backed by an independently benchmarked, 80+ client outcome study.', assets:['2026 Client Value Assessment Report','WordPress knowledge hub'], cta:'Access partner-ready messaging and proof points', objections:[], proof:'80+ clients, 5 continents, $100B+ capital managed — a scale reference partners can use with confidence.'},
+  {name:'Sales', tag:'Account executives', goals:['Shorter sales cycles','Stronger, more defensible proposals','Confident handling of financial and technical objections'], pain:['Prospects skeptical of vendor-reported ROI claims','Difficulty quantifying value before a Business Value Assessment','Competing against status-quo spreadsheets'], msg:'Use independently benchmarked outcomes — not vendor claims — to build trust early in the sales cycle.', assets:['Full Sales Enablement kit (see Sales Enablement tab)'], cta:'Book a Business Value Assessment for your next qualified opportunity', objections:['See full objection handling library in the Sales Enablement tab.'], proof:'$48M average annual enterprise value; 96 bps ROIC lift.'},
+  {name:'Marketing', tag:'Product & field marketing', goals:['Consistent messaging at scale','Higher-quality, better-converting content','Clear proof points for every campaign'], pain:['Fragmented messaging across regions and teams','Difficulty keeping statistics current and accurate','Limited visibility into what content already exists'], msg:'This hub is your source of truth — every statistic, message, and asset traces back to the same report.', assets:['Full Marketing Enablement kit (see Marketing Enablement tab)'], cta:'Use the Asset Library before creating new content', objections:[], proof:'Full benchmark data set available in the Stats Dashboard tab.'}
+];
+function personaCard(p){
+  const goals = p.goals ? `<div class="field-block"><div class="fk">Goals</div><ul>${p.goals.map(g=>`<li>${g}</li>`).join('')}</ul></div>` : '';
+  const pain = p.pain ? `<div class="field-block"><div class="fk">Pain points</div><ul>${p.pain.map(g=>`<li>${g}</li>`).join('')}</ul></div>` : '';
+  const obj = p.objections && p.objections.length ? `<div class="field-block"><div class="fk">Likely objections</div><ul>${p.objections.map(g=>`<li>${g}</li>`).join('')}</ul></div>` : '';
+  return `<div class="persona-card" data-name="${p.name.toLowerCase()}">
+    <h3>${p.name}</h3><span class="role-tag">${p.tag}</span>
+    ${goals}${pain}
+    <div class="field-block"><div class="fk">Key messaging</div><p>${p.msg}</p></div>
+    <div class="field-block"><div class="fk">Recommended assets</div>${p.assets.map(a=>`<span class="pill purple">${a}</span>`).join('')}</div>
+    <div class="field-block"><div class="fk">Suggested CTA</div><p>${p.cta}</p></div>
+    ${obj}
+    <div class="field-block"><div class="fk">Proof points</div><p>${p.proof}</p></div>
+  </div>`;
+}
+document.getElementById('personaGrid').innerHTML = personas.map(personaCard).join('');
+function filterPersonas(){
+  const q = document.getElementById('personaSearch').value.toLowerCase();
+  document.querySelectorAll('.persona-card').forEach(c=>{
+    c.style.display = c.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+/* ---------------- Regional playbooks ---------------- */
+const regions = [
+  {name:'North America', msg:'Lead with regulatory defensibility and ROIC — NA utilities and transmission operators face the heaviest capital investment wave and the most scrutinized funding approvals.', challenges:['Grid modernization and electrification pressure','Rate case and regulatory hearing scrutiny','Aging infrastructure across large geographic footprints'], proof:['Grid modernization utility: 100% plan approval, 70% faster','NA integrated energy company: $230M in low-value spend removed'], assets:['Regulatory outcomes case study','Grid modernization example'], campaigns:['ABM targeting investor-owned utilities ahead of rate case cycles'], cta:'Request a rate-case-ready Business Value Assessment'},
+  {name:'United Kingdom', msg:'Lead with sustainability and productivity outcomes — UK water and energy clients have some of the strongest combined financial and carbon results in the study.', challenges:['Ofwat/Ofgem price control cycles','Net zero and carbon reduction mandates','Aging water and energy infrastructure'], proof:['UK water company: £50M in productivity/portfolio benefits, 61% carbon reduction','UK utility: ~$12M in annual maintenance savings'], assets:['UK water case study','OPEX efficiency case studies'], campaigns:['Price control cycle-aligned campaign for water and energy regulators'], cta:'See how a UK water utility cut carbon impact by 61%'},
+  {name:'Europe', msg:'Lead with enterprise-wide governance and ESG-integrated planning — European organizations increasingly need cross-border, cross-asset-class consistency.', challenges:['EU regulatory and ESG reporting requirements','Cross-border grid and infrastructure coordination','Multi-language, multi-entity governance complexity'], proof:['Enterprise-wide capital governance practices (Section 2.5)','Value framework standardization outcomes'], assets:['2026 Client Value Assessment Report','Executive briefing'], campaigns:['Governance and ESG-themed webinar series for EU infrastructure operators'], cta:'Explore enterprise-wide governance best practices'},
+  {name:'APAC', msg:'Lead with growth and modernization — APAC infrastructure operators are scaling rapidly and need planning maturity to keep pace with expansion.', challenges:['Rapid infrastructure expansion and urbanization','Varying regulatory maturity across markets','Balancing growth capital with reliability targets'], proof:['Planning productivity gains (30% average)','Optimization vs. prioritization research (University of Southampton)'], assets:['Client Value Assessment Report','Planning efficiency case studies'], campaigns:['Modernization-themed content syndication across regional infrastructure media'], cta:'Benchmark your planning maturity against global peers'},
+  {name:'Middle East', msg:'Lead with large-scale capital deployment and strategic agility — Middle East infrastructure programs involve some of the largest single-portfolio investments in the study base.', challenges:['Large, complex national infrastructure programs','Diversification away from single-resource economies','Rapid timeline expectations from government stakeholders'], proof:['Multi-regional utility: $12M reallocated to higher-value projects with 4x relative return','Capital efficiency outcomes (9% average)'], assets:['Capital efficiency case studies','Executive briefing'], campaigns:['Executive briefing series for national infrastructure authorities'], cta:'Discuss a portfolio-scale Business Value Assessment'},
+  {name:'Latin America', msg:'Lead with capital efficiency under budget constraint — many LatAm infrastructure operators are optimizing within fixed or shrinking capital envelopes.', challenges:['Currency and macroeconomic volatility affecting capital budgets','Mandated capital program reductions','Need to preserve service outcomes despite funding pressure'], proof:['Client example: preserved enterprise value despite a mandated 10% budget cut'], assets:['Capital efficiency case studies','Client Value Assessment Report'], campaigns:['"Do more with less" campaign theme for budget-constrained operators'], cta:'See how one organization preserved value through a 10% budget cut'}
+];
+function regionCard(r){
+  return `<div class="region-card">
+    <h3>${r.name}</h3><span class="role-tag">Regional playbook</span>
+    <div class="field-block"><div class="fk">Primary message</div><p>${r.msg}</p></div>
+    <div class="field-block"><div class="fk">Regional challenges</div><ul>${r.challenges.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+    <div class="field-block"><div class="fk">Relevant proof points</div><ul>${r.proof.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+    <div class="field-block"><div class="fk">Recommended assets</div>${r.assets.map(a=>`<span class="pill purple">${a}</span>`).join('')}</div>
+    <div class="field-block"><div class="fk">Suggested campaigns</div><ul>${r.campaigns.map(c=>`<li>${c}</li>`).join('')}</ul></div>
+    <div class="field-block"><div class="fk">Local call to action</div><p>${r.cta}</p></div>
+  </div>`;
+}
+document.getElementById('regionGrid').innerHTML = regions.map(regionCard).join('');
+
+/* ---------------- Buyer journey ---------------- */
+const journey = [
+  {asset:'WordPress knowledge hub', stage:'Awareness', team:'Digital / Content Marketing', use:'Primary landing page introducing the report and its headline statistics.'},
+  {asset:'LinkedIn ad visuals & copy', stage:'Awareness', team:'Demand Generation', use:'Drives traffic from social to the knowledge hub and Folloze board.'},
+  {asset:'Main campaign banner', stage:'Awareness', team:'Brand / Digital Marketing', use:'Visual identity across web, email, and paid placements.'},
+  {asset:'2026 Client Value Assessment Report (PDF)', stage:'Consideration', team:'Content / Demand Generation', use:'Primary gated asset for lead capture and nurture.'},
+  {asset:'Folloze ABM board', stage:'Consideration', team:'ABM / Field Marketing', use:'Personalized experience for named target accounts.'},
+  {asset:'Persona-specific messaging (this hub)', stage:'Consideration', team:'Product Marketing / Sales', use:'Tailors follow-up conversations to the buyer\'s specific role and priorities.'},
+  {asset:'Discovery questions & elevator pitch', stage:'Evaluation', team:'Sales', use:'Qualifies opportunity and surfaces which outcome dimension matters most.'},
+  {asset:'Regional case studies & proof points', stage:'Evaluation', team:'Sales Engineering / Solution Consulting', use:'Demonstrates relevant, industry-specific outcomes during technical evaluation.'},
+  {asset:'Tailored Business Value Assessment', stage:'Decision', team:'Solution Consulting / Sales', use:'Quantifies expected value for the specific prospect, mirroring the report\'s methodology.'},
+  {asset:'Executive briefing', stage:'Decision', team:'Sales / Executive Sponsors', use:'Closes the loop with economic buyers using ROIC and enterprise value framing.'},
+  {asset:'Executive Business Review benchmarks', stage:'Expansion', team:'Customer Success', use:'Benchmarks realized value against study averages to support renewal and expansion.'},
+  {asset:'Roadmap & maturity practices (Section 2.5)', stage:'Expansion', team:'Customer Success / Solution Consulting', use:'Guides customers toward broader adoption and deeper organizational maturity.'}
+];
+document.getElementById('journeyBody').innerHTML = journey.map(j=>`
+  <tr><td><strong style="color:#fff;">${j.asset}</strong></td><td><span class="stage-badge stage-${j.stage}">${j.stage}</span></td><td>${j.team}</td><td>${j.use}</td></tr>
+`).join('');
+
+/* ---------------- Asset library ---------------- */
+const assetLib = [
+  {asset:'2026 Client Value Assessment Report.pdf', purpose:'Primary source of truth for all campaign statistics and proof points', audience:'All teams', owner:'Product Marketing', stage:'Consideration', loc:'SharePoint › Client Value Assessment Report › Assets', notes:'Do not alter or extrapolate figures beyond what is published.'},
+  {asset:'Folloze ABM board', purpose:'Personalized ABM experience for named target accounts', audience:'Sales, ABM, Field Marketing', owner:'ABM / Field Marketing', stage:'Consideration', loc:'https://engage.copperleaf.com/494c73', notes:'Update account-specific content per named account list.'},
+  {asset:'WordPress knowledge hub', purpose:'Primary public campaign landing page', audience:'All external prospects', owner:'Digital Marketing', stage:'Awareness', loc:'copperleaf.com/knowledge-hub/2026-client-value-assessment-report', notes:'SEO-optimized entry point; links to gated report download.'},
+  {asset:'Main campaign banner', purpose:'Primary visual identity for the campaign', audience:'All', owner:'Brand / Creative', stage:'Awareness', loc:'SharePoint › Landing Page Content', notes:'1672×500px; use across web and email.'},
+  {asset:'WordPress banner', purpose:'Knowledge hub page header visual', audience:'External web visitors', owner:'Digital Marketing', stage:'Awareness', loc:'SharePoint › Landing Page Content', notes:'Sized for WordPress knowledge hub header.'},
+  {asset:'Folloze banner', purpose:'ABM board header visual', audience:'Named target accounts', owner:'ABM / Field Marketing', stage:'Consideration', loc:'SharePoint › Landing Page Content', notes:'1920×500px; used on the Folloze board.'},
+  {asset:'LinkedIn ad visuals', purpose:'Paid social creative driving traffic to the hub', audience:'Target personas via LinkedIn targeting', owner:'Demand Generation', stage:'Awareness', loc:'SharePoint › LinkedIn Ad Visuals', notes:'Coordinate with paid media calendar.'},
+  {asset:'LinkedIn ad copies & captions', purpose:'Paid social messaging paired with ad visuals', audience:'Target personas via LinkedIn targeting', owner:'Demand Generation', stage:'Awareness', loc:'SharePoint › LinkedIn Ad Copies and Captions', notes:'Must align to approved message hierarchy.'},
+  {asset:'Landing page content', purpose:'Source copy for the WordPress knowledge hub', audience:'Digital Marketing / Web team', owner:'Content Marketing', stage:'Awareness', loc:'SharePoint › Landing Page Content', notes:'Keep synced with any updates to this hub\'s messaging.'},
+  {asset:'This campaign hub', purpose:'Internal enablement source of truth', audience:'All internal teams', owner:'Global Campaigns Team', stage:'Awareness', loc:'Internal portal (recreate in SharePoint/Confluence/Notion)', notes:'Update as new client outcomes and assets become available.'},
+  {asset:'Business Value Assessment template', purpose:'Quantify prospect-specific value using the report\'s methodology', audience:'Sales, Solution Consulting', owner:'Solution Consulting', stage:'Decision', loc:'SharePoint › Client Value Assessment Report › Assets', notes:'Use alongside the report\'s five outcome dimensions to model prospect-specific value.'},
+  {asset:'Executive briefing deck', purpose:'C-suite / economic buyer conversation support', audience:'Executive sponsors, Sales', owner:'Product Marketing', stage:'Decision', loc:'SharePoint › Client Value Assessment Report › Assets', notes:'Build from the Sales Enablement 2-minute pitch in this hub.'}
+];
+function stageClass(s){ return 'stage-'+s; }
+function assetRow(a){
+  const isUrl = a.loc.startsWith('http');
+  const locHtml = isUrl ? `<a href="${a.loc}" target="_blank" rel="noopener">${a.loc}</a>` : a.loc;
+  return `<tr data-search="${(a.asset+a.purpose+a.audience+a.owner+a.notes).toLowerCase()}" data-stage="${a.stage}">
+    <td><strong style="color:#fff;">${a.asset}</strong></td><td>${a.purpose}</td><td>${a.audience}</td><td>${a.owner}</td>
+    <td><span class="stage-badge ${stageClass(a.stage)}">${a.stage}</span></td><td>${locHtml}</td><td>${a.notes}</td>
+  </tr>`;
+}
+document.getElementById('assetBody').innerHTML = assetLib.map(assetRow).join('');
+function filterAssets(){
+  const q = document.getElementById('assetSearch').value.toLowerCase();
+  const stage = document.getElementById('assetStageFilter').value;
+  document.querySelectorAll('#assetBody tr').forEach(tr=>{
+    const matchQ = tr.dataset.search.includes(q);
+    const matchS = !stage || tr.dataset.stage === stage;
+    tr.style.display = (matchQ && matchS) ? '' : 'none';
+  });
+}
+
+/* ---------------- Objection handling ---------------- */
+const objections = [
+  {q:'"We already have a capital planning process."', a:'Most legacy processes use ranking or cut-line prioritization, which doesn\'t account for interdependencies, timing, or resource constraints. Independent research shows optimization delivers 7–20% more portfolio value under identical constraints — the process isn\'t being replaced, it\'s being upgraded.'},
+  {q:'"How do we know these results apply to us?"', a:'The benchmark spans 80+ organizations across five continents and multiple sectors (electric/gas, water, transportation, infrastructure), collectively managing over $100B in capital annually — this is aggregated, cross-industry data, not a single case study.'},
+  {q:'"This sounds like just another prioritization tool."', a:'Reframe immediately: IFS Copperleaf is built on the Copperleaf Value Framework, which evaluates the portfolio as an interconnected system and optimizes for total value — not a scoring or ranking engine.'},
+  {q:'"Our data isn\'t clean enough for this."', a:'Report findings show benefits compound over time as asset hierarchy, data quality, and governance mature — most clients start with a defined scope and expand coverage as readiness improves.'},
+  {q:'"We can\'t justify the investment right now."', a:'Position the ROI translation directly: a 96 bps ROIC improvement equals roughly $10M in additional annual operating profit per $1B invested — this is a capital efficiency case, not just a software purchase.'}
+];
+document.getElementById('objectionAccordion').innerHTML = objections.map((o,i)=>`
+  <div class="accordion-item" id="obj-${i}">
+    <div class="accordion-head" onclick="toggleAcc('obj-${i}')"><h4>${o.q}</h4><svg class="chev" width="18" height="18"><use href="#i-arrow"/></svg></div>
+    <div class="accordion-body"><p style="padding-bottom:16px;">${o.a}</p></div>
+  </div>
+`).join('');
+function toggleAcc(id){
+  const el = document.getElementById(id);
+  const body = el.querySelector('.accordion-body');
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.accordion-item').forEach(i=>{ i.classList.remove('open'); i.querySelector('.accordion-body').style.maxHeight = null; });
+  if(!isOpen){ el.classList.add('open'); body.style.maxHeight = body.scrollHeight + 40 + 'px'; }
+}
+
+/* ---------------- Marketing enablement ---------------- */
+const marketingCards = [
+  {t:'Campaign strategy', c:'Position the report as the campaign\'s central proof asset. Every channel (paid, organic, ABM, email) should drive toward either the gated PDF download or the Folloze board, depending on account tier.'},
+  {t:'Email nurture', c:'Sequence: (1) industry pressure teaser, (2) report download offer, (3) persona-specific proof point, (4) Business Value Assessment CTA. Segment by persona using the Audience Personas tab.'},
+  {t:'Social strategy', c:'Lead organic and paid social with the most quotable statistics ($48M average enterprise value, 96 bps ROIC lift) rather than generic product messaging.'},
+  {t:'LinkedIn campaigns', c:'Use the existing LinkedIn ad visuals and copy library; target by persona (Finance, Regulatory, Engineering, Executive) and align ad copy to the funnel messaging framework.'},
+  {t:'Content syndication', c:'Syndicate the report to industry-specific publications and analyst channels serving utilities, water, rail, and infrastructure audiences.'},
+  {t:'ABM recommendations', c:'Use the Folloze board as the anchor experience for named target accounts; personalize with regional and persona-specific proof points from this hub.'},
+  {t:'Paid media', c:'Prioritize LinkedIn and industry trade publications; retarget knowledge hub visitors who did not complete the report download.'},
+  {t:'SEO opportunities', c:'Target search terms around "asset investment planning benchmark," "capital planning ROI," and "utility capital efficiency" — the knowledge hub page should be optimized for these terms.'},
+  {t:'Blog strategy', c:'Develop a blog series unpacking each of the report\'s five outcome dimensions (capital efficiency, OPEX, planning productivity, execution, regulatory) as standalone, SEO-friendly posts linking back to the full report.'}
+];
+document.getElementById('marketingGrid').innerHTML = marketingCards.map(m=>`<div class="card"><h4>${m.t}</h4><p>${m.c}</p></div>`).join('');
+
+/* ---------------- Report highlights ---------------- */
+const topInsights = [
+  'Utilities alone will invest $1.4T+ through 2030 — legacy planning tools can\'t keep pace.',
+  'Optimization outperforms ranking-based prioritization by 7–20% (University of Southampton).',
+  'A consistent, enterprise-wide value framework is the foundational shift behind capital efficiency gains.',
+  'Planning cycles can be cut in half — or more — once processes are systematized.',
+  'External stakeholders respond to clarity: quantified trade-offs win regulatory and board approval.',
+  'OPEX efficiency comes from risk/consequence-based planning, not just cost cutting.',
+  'Sustained value depends on governance and organizational maturity, not analytics alone.',
+  'Connecting planning to execution feedback materially improves forecast accuracy.',
+  'A 96 bps ROIC lift equals ~$10M in added annual operating profit per $1B invested.',
+  'Value realization is not automatic — it requires willingness to challenge legacy processes.'
+];
+const topExec = [
+  'The practical question isn\'t whether value can be achieved, but what\'s required to unlock it.',
+  'Mature organizations treat asset investment planning as an operating discipline, not a one-time deployment.',
+  'Enterprise-wide capital governance, integrated planning/execution, and organizational maturity sustain results.',
+  'Capital efficiency functions as a repeatable operating capability, not a one-time financial result.',
+  'The quality of external outcomes is closely linked to the quality of internal decision-making.'
+];
+const topOutcomes = [
+  'UK water company: £50M in benefits + 61% carbon impact reduction.',
+  'US utility: 20% O&M improvement, ~$25M annual savings.',
+  'NA integrated energy company: $230M in low-value spend removed.',
+  'Grid modernization utility: 100% plan approval, 70% faster approval cycle.',
+  'Multi-national transmission org: 80% bundling ratio improvement, ~£2.5M/year outage savings.'
+];
+const topProof = [
+  '"Copperleaf has helped us create and unlock a new organizational capability around asset investment planning."',
+  '"We were able to secure additional spend on maintenance capital because we could effectively articulate these needs."',
+  '"We have proactively identified gaps in forecasting... and eliminated ~$10M in forecasting variance."',
+  '80+ clients, 5 continents, $100B+ capital managed annually.',
+  '$48M average annual enterprise value realized per organization.'
+];
+function bulletList(arr){ return `<div class="card">${arr.map((x,i)=>`<div class="list-num" style="${i===arr.length-1?'margin-bottom:0':''}"><span class="num-badge">${i+1}</span><p>${x}</p></div>`).join('')}</div>`; }
+document.getElementById('topInsights').innerHTML = bulletList(topInsights);
+document.getElementById('topExec').innerHTML = bulletList(topExec);
+document.getElementById('topOutcomes').innerHTML = bulletList(topOutcomes);
+document.getElementById('topProof').innerHTML = bulletList(topProof);
+
+/* ---------------- Content map ---------------- */
+const mapNodes = [
+  {id:'report', label:'2026 Client Value Assessment Report', x:50, y:50, hub:true},
+  {id:'wp', label:'WordPress hub', x:50, y:10, color:'blue'},
+  {id:'blogs', label:'Blogs', x:15, y:20, color:'blue'},
+  {id:'webinars', label:'Webinars', x:85, y:20, color:'blue'},
+  {id:'linkedin', label:'LinkedIn ads', x:12, y:50, color:'lilac'},
+  {id:'folloze', label:'Folloze ABM', x:12, y:80, color:'lilac'},
+  {id:'sharepoint', label:'SharePoint', x:50, y:92, color:'yellow'},
+  {id:'salesdeck', label:'Sales deck', x:88, y:50, color:'green'},
+  {id:'casestudies', label:'Case studies', x:88, y:80, color:'green'},
+  {id:'bva', label:'Business Value Assessment', x:78, y:65, color:'green'},
+  {id:'briefings', label:'Executive briefings', x:22, y:65, color:'green'},
+];
+const mapEdges = ['wp','blogs','webinars','linkedin','folloze','sharepoint','salesdeck','casestudies','bva','briefings'];
+function renderMap(){
+  const wrap = document.getElementById('mapWrap');
+  const colorVar = {blue:'var(--ifs-blue)', lilac:'var(--ifs-lilac)', green:'var(--ifs-green)', yellow:'var(--ifs-yellow)'};
+  let svg = `<svg class="map-svg" viewBox="0 0 100 85" preserveAspectRatio="none">`;
+  const hub = mapNodes.find(n=>n.hub);
+  mapEdges.forEach(id=>{
+    const n = mapNodes.find(m=>m.id===id);
+    svg += `<line x1="${hub.x}" y1="${hub.y*0.85}" x2="${n.x}" y2="${n.y*0.85}" stroke="rgba(255,255,255,0.18)" stroke-width="0.3"/>`;
+  });
+  svg += `</svg>`;
+  let nodesHtml = mapNodes.map(n=>{
+    const style = n.hub ? '' : `border-color:${colorVar[n.color]||'var(--line)'};`;
+    return `<div class="map-node ${n.hub?'hub':''}" style="left:${n.x}%; top:${n.y}%; ${style}">${n.label}</div>`;
+  }).join('');
+  wrap.innerHTML = svg + nodesHtml;
+}
+renderMap();
+</script>
+</body>
+</html>
